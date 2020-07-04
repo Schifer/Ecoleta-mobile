@@ -33,12 +33,16 @@ const Detail = () => {
   
   useEffect(() => {
     api.get(`points/${routeParams.point_id}`).then(response => {
-
+      setData(response.data);
     });
   }, []);
 
   function handleNavigateBack() {
     navigation.goBack();
+  }
+
+  if (!data.point) {
+    return null;
   }
 
   return (
@@ -50,15 +54,15 @@ const Detail = () => {
 
           <Image 
             style={styles.pointImage} 
-            source={{ uri: "https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=50"}}
+            source={{ uri: data.point.image }}
           />  
 
-          <Text style={styles.pointName}>Mercado</Text>
-          <Text style={styles.pointItems}>Lâmpadas, Óleo de cozinha</Text>
+          <Text style={styles.pointName}>{data.point.name}</Text>
+          <Text style={styles.pointItems}>{data.items.map(item => item.title).join(', ')}</Text>
 
           <View style={styles.address}>
             <Text style={styles.addressTitle}>Endereço</Text>
-            <Text style={styles.addressContent}>Rio do Sul, SC</Text>
+          <Text style={styles.addressContent}>{data.point.city}, {data.point.uf}</Text>
           </View>
       </View>
       <View style={styles.footer}>
